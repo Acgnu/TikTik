@@ -1,81 +1,65 @@
 package com.acgnu.dikdick;
 
-import static android.service.controls.ControlsProviderService.TAG;
-
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import com.acgnu.dikdick.MergeListAdapter.DataHolder;
 
+/** Horizontal swipe reveals delete; vertical gestures remain ordinary list scrolling. */
 public class ScrollDelListView extends ListView {
-  private Context mContext;
-  private LinearLayout itemRoot;
-  private final int MAX_WIDTH = 100;
-  private int mlastX = 0;
-  //x的按下位置
-  private int mXTouch = 0;
-  //y的按下位置
-  private int mYTouch = 0;
+    private LinearLayout row;
+    private final int revealWidth;
+    private final int touchSlop;
+    private float downX, downY;
+    private int initialScroll;
+    private boolean swiping, vertical;
 
-  public ScrollDelListView(Context context, AttributeSet attrs) {
-    super(context, attrs);
-    this.mContext = context;
-  }
-
-  @Override
-  public boolean onTouchEvent(MotionEvent event) {
-    int maxLength = dipToPx(mContext, MAX_WIDTH);
-    int x = (int) event.getX();
-    int y = (int) event.getY();
-    switch (event.getAction()) {
-      case MotionEvent.ACTION_DOWN: {
-        int position = pointToPosition(x, y);
-        if (position != INVALID_POSITION) {
-          DataHolder data = (DataHolder) getItemAtPosition(position);
-          itemRoot = data.rootView;
-        } else {
-          itemRoot = null;
-        }
-        mXTouch = x;
-        mYTouch = y;
-      } break;
-      case MotionEvent.ACTION_MOVE: {
-        if(itemRoot != null){
-          int scrollX = itemRoot.getScrollX();
-          int newScrollX = scrollX + mlastX - x;
-          if (newScrollX < 0) {
-            newScrollX = 0;
-          } else if (newScrollX > maxLength) {
-            newScrollX = maxLength;
-          }
-          if(Math.abs(x - mXTouch) > Math.abs(y - mYTouch)) {
-            itemRoot.scrollTo(newScrollX, 0);
-          }
-        }
-      } break;
-      case MotionEvent.ACTION_UP: {
-        if(itemRoot != null){
-          int scrollX = itemRoot.getScrollX();
-          int newScrollX = scrollX + mlastX - x;
-          if (scrollX > maxLength / 2) {
-            newScrollX = maxLength;
-          } else {
-            newScrollX = 0;
-          }
-          itemRoot.scrollTo(newScrollX, 0);
-        }
-        mXTouch = 0;
-        mYTouch = 0;
-      } break;
+    public ScrollDelListView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        revealWidth = Math.round(100 * getResources().getDisplayMetrics().density);
+        touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
     }
-    mlastX = x;
-    return super.onTouchEvent(event);
-  }
-
-  private int dipToPx(Context context, int dip) {
-    return (int) (dip * context.getResources().getDisplayMetrics().density + 0.5f);
-  }
+    @Override public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                downX = event.getX(); downY = event.getY();
+                swiping = false; vertical = false;
+                int position = pointToPosition((int) downX, (int) downY);
+                row = position == INVALID_POSITION ? null
+                        : (LinearLayout) getChildAt(position - getFirstVisiblePosition());
+                initialScroll = row == null ? 0 : row.getScrollX();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float dx = event.getX() - downX, dy = event.getY() - downY;
+                if (!swiping && !vertical && Math.max(Math.abs(dx), Math.abs(dy)) > touchSlop) {
+                    vertical = Math.abs(dy) >= Math.abs(dx);
+                    swiping = !vertical && row != null;
+                    if (swiping) {
+                        MotionEvent cancel = MotionEvent.obtain(event);
+                        cancel.setAction(MotionEvent.ACTION_CANCEL);
+                        super.onTouchEvent(cancel);
+                        cancel.recycle();
+                    }
+                }
+                if (swiping) {
+                    row.scrollTo(Math.max(0, Math.min(revealWidth, initialScroll - (int) dx)), 0);
+                    return true;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                if (swiping) {
+                    row.scrollTo(event.getActionMasked() == MotionEvent.ACTION_UP
+                            && row.getScrollX() > revealWidth / 2 ? revealWidth : 0, 0);
+                    swiping = false;
+                    row = null;
+                    return true;
+                }
+                row = null;
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
 }

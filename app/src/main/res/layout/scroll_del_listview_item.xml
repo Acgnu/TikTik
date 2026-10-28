@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/lin_root"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:minHeight="60dp">
-
-  <TextView
-    android:id="@+id/title"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:textColor="@color/colorTextDefault"
-    android:gravity="center"
-    android:textSize="18dp" />
-
-  <TextView
-    android:id="@+id/del"
-    android:layout_width="100dp"
-    android:layout_height="fill_parent"
-    android:background="#F64141"
-    android:text="删除"
-    android:textSize="18dp"
-    android:textColor="#ffffff"
-    android:gravity="center" />
-
+    android:id="@+id/lin_root" android:orientation="horizontal"
+    android:layout_width="match_parent" android:layout_height="76dp">
+    <LinearLayout android:id="@+id/preset_content" android:orientation="horizontal"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:gravity="center_vertical" android:paddingStart="24dp" android:paddingEnd="24dp">
+        <TextView android:id="@+id/title" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content" android:textColor="#262D29"
+            android:textSize="17sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:id="@+id/preset_bpm" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:textColor="#65756B" android:textSize="14sp" />
+    </LinearLayout>
+    <TextView android:id="@+id/del" android:layout_width="100dp" android:layout_height="match_parent"
+        android:background="#C9574E" android:text="删除" android:textSize="16sp"
+        android:textColor="#FFFFFF" android:gravity="center" />
 </LinearLayout>

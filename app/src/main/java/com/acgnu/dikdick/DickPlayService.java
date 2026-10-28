@@ -2,65 +2,32 @@ package com.acgnu.dikdick;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Process;
 
 public class DickPlayService extends Service {
-    private Looper serviceLooper;
-    private ServiceHandler serviceHandler;
-    private SoundPoolUtil mSoundPoolInstance;
-    private int delay = 0;
-    private boolean isRunning = false;
-
-    public DickPlayService() {
-    }
-
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
-        }
-        @Override
-        public void handleMessage(Message msg) {
-            try {
-                while (true) {
-                    if(delay == 0) {
-                        break;
-                    }
-                    mSoundPoolInstance.play();
-                    Thread.sleep(delay);
-                }
-            } catch (InterruptedException e) {
-                stopSelf(msg.arg1);
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
-    @Override
-    public void onCreate() {
-        HandlerThread thread = new HandlerThread("ServiceStartArguments",
-            Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-
-        serviceLooper = thread.getLooper();
-        serviceHandler = new ServiceHandler(serviceLooper);
-        mSoundPoolInstance = SoundPoolUtil.getInstance(getApplicationContext());
-    }
+    public static volatile boolean isPlaying;
+    public static volatile int currentBpm = Tempo.DEFAULT;
+    private MetronomePlayer player;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        delay = intent.getIntExtra("speed", AddNewActivity.MIN_DELAY);
-        if(! isRunning) {
-            Message msg = serviceHandler.obtainMessage();
-            msg.arg1 = startId;
-            serviceHandler.sendMessage(msg);
-            isRunning = true;
+        if (intent == null) {
+            stopSelf(startId);
+            return START_NOT_STICKY;
         }
-        return START_STICKY;
+        int bpm = intent.getIntExtra("bpm", Tempo.DEFAULT);
+        if (bpm < Tempo.MIN || bpm > Tempo.MAX) {
+            stopSelf(startId);
+            return START_NOT_STICKY;
+        }
+        if (player == null) {
+            player = new MetronomePlayer(bpm);
+        }
+        player.setBpm(bpm);
+        currentBpm = bpm;
+        isPlaying = true;
+        player.start();
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -70,7 +37,11 @@ public class DickPlayService extends Service {
 
     @Override
     public void onDestroy() {
-        delay = 0;
-        stopSelf();
+        isPlaying = false;
+        if (player != null) {
+            player.stop();
+            player = null;
+        }
+        super.onDestroy();
     }
 }

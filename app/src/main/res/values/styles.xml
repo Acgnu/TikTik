@@ -1,11 +1,19 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
     <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:colorPrimary">@color/colorPrimary</item>
+    <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="android:colorAccent">@color/colorAccent</item>
   </style>
 
+  <style name="TempoActionButton">
+    <item name="android:layout_width">56dp</item>
+    <item name="android:layout_height">56dp</item>
+    <item name="android:background">@drawable/action_circle</item>
+    <item name="android:elevation">6dp</item>
+    <item name="android:padding">16dp</item>
+    <item name="android:scaleType">fitCenter</item>
+  </style>
 </resources>

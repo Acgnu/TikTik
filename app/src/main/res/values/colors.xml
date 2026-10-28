@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#29B2E8</color>
-  <color name="colorPrimaryDark">#29B2E8</color>
-  <color name="colorAccent">#03DAC5</color>
+  <color name="colorPrimary">#378966</color>
+  <color name="colorPrimaryDark">#263F35</color>
+  <color name="colorAccent">#263F35</color>
   <color name="colorWhite">#FFFFFF</color>
   <color name="colorTextDefault">#272727</color>
+  <color name="tempo_playing">#378966</color>
+  <color name="tempo_paused">#C77C42</color>
 </resources>
