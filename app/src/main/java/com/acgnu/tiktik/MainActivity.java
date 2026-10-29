@@ -1,4 +1,4 @@
-package com.acgnu.dikdick;
+package com.acgnu.tiktik;
 
 import android.content.Intent;
 import android.os.Bundle;

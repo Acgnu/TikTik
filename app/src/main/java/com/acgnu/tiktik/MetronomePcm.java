@@ -1,4 +1,4 @@
-package com.acgnu.dikdick;
+package com.acgnu.tiktik;
 
 /** Single-threaded PCM renderer. Timing is measured in audio frames, not wall time. */
 final class MetronomePcm {

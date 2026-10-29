@@ -1,4 +1,4 @@
-package com.acgnu.dikdick;
+package com.acgnu.tiktik;
 
 import android.media.AudioAttributes;
 import android.media.AudioFormat;

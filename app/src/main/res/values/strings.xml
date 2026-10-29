@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">嘀嗒嘀嗒</string>
+  <string name="app_name">TikTik</string>
   <string name="tempo_help_title">操作说明</string>
   <string name="tempo_help_message">顺时针旋转圆环增加 BPM，逆时针旋转减少 BPM，每次调整 1。\n\n快速滑动后圆环会继续旋转并逐渐减速，触摸圆环可停止惯性旋转。\n\n点击中央 BPM 数字暂停或恢复播放。绿色表示播放，橙色表示暂停。\n\n选择列表中的节拍即可播放。调速后点击保存按钮才会更新该预设；点击 + 可将当前 BPM 保存为新预设。</string>
 </resources>

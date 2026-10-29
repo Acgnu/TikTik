@@ -1,4 +1,4 @@
-package com.acgnu.dikdick;
+package com.acgnu.tiktik;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

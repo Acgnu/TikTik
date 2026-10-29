@@ -4,7 +4,7 @@
     android:orientation="vertical" android:background="#F6F5F1">
     <FrameLayout android:id="@+id/tempo_panel" android:layout_width="match_parent"
         android:layout_height="wrap_content" android:background="@color/tempo_paused">
-        <com.acgnu.dikdick.TempoDialView android:id="@+id/tempo_dial"
+        <com.acgnu.tiktik.TempoDialView android:id="@+id/tempo_dial"
             android:layout_width="match_parent" android:layout_height="wrap_content" />
         <ImageButton android:id="@+id/tempo_help" android:layout_width="48dp"
             android:layout_height="48dp" android:layout_gravity="top|end"
@@ -13,7 +13,7 @@
             android:src="@drawable/ic_help" android:contentDescription="@string/tempo_help_title" />
     </FrameLayout>
     <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
-        <com.acgnu.dikdick.ScrollDelListView android:id="@+id/listview"
+        <com.acgnu.tiktik.ScrollDelListView android:id="@+id/listview"
             android:layout_width="match_parent" android:layout_height="match_parent"
             android:divider="#E5E7E0" android:dividerHeight="1dp"
             android:paddingBottom="150dp" android:clipToPadding="false" />

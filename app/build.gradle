@@ -4,7 +4,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.acgnu.dikdick"
+        applicationId "com.acgnu.tiktik"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
